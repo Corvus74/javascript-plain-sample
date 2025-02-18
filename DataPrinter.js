@@ -61,7 +61,7 @@ export class DataPrinter {
                 currentLine.platform = stationBoardElement.stop.platform;
                 if(this.checkIfStopsInStationTwo(stationBoardElement,datasetStationTwo)){
 
-                    currentLine.stopsInStationTwo = "true"
+                    currentLine.stopsInStationTwo = datasetStationTwo.station.name
                     currentLine.stopTimeInStationTwo = this.getTimeAtStationTwo(stationBoardElement,datasetStationTwo)
 
                 }else{
@@ -75,20 +75,32 @@ export class DataPrinter {
         console.table(tableForPrint);
     }
     static checkIfStopsInStationTwo(stationBoardCurrentSet, datasetStationTwo) {
+        let found = false;
         datasetStationTwo.stationboard.forEach((stationBoardElem) =>{
-            if(stationBoardCurrentSet.number === stationBoardElem.number ){
-                return true;
+            let trainNumberOne=this.removeZerosAtStart(stationBoardCurrentSet.name);
+            let trainNumberTwo=this.removeZerosAtStart(stationBoardElem.name);
+            if(trainNumberOne === trainNumberTwo ){
+                found=true;
             }
         })
-        return false;
+        return found;
     }
-    static getTimeAtStationTwo(stationBoardCurrentSet,datasetStationTwo) {
+    static getTimeAtStationTwo(stationBoardCurrentSet, datasetStationTwo) {
+        let currentTime ="-";
         datasetStationTwo.stationboard.forEach((stationBoardElem) =>{
-            if(stationBoardCurrentSet.number === stationBoardElem.number ){
-                return stationBoardElem.stop.prognosis.departure;
+            let trainNumberOne=this.removeZerosAtStart(stationBoardCurrentSet.name);
+            let trainNumberTwo=this.removeZerosAtStart(stationBoardElem.name);
+            if(trainNumberOne === trainNumberTwo ){
+                currentTime =stationBoardElem.stop.prognosis.departure;
             }
         });
-        return "-";
+        return currentTime;
     }
+    static removeZerosAtStart(currentTrainName){
+        if (currentTrainName === undefined){
+            return "-"
+        }
+        return currentTrainName.replace(/^0+/, '')
 
+    }
 }

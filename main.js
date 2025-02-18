@@ -14,8 +14,6 @@ class Solution {
         let mapper = new RootMapper();
         let dataFirst = mapper.convertDataset(dataStations[0]);
         let dataSecond = mapper.convertDataset(dataStations[1]);
-
-        DataPrinter.printTimetable(dataSecond);
         DataPrinter.printTimetableForBothStations(dataFirst, dataSecond);
     }
 
